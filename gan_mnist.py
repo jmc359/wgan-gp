@@ -145,6 +145,7 @@ def calc_gradient_penalty(netD, real_data, fake_data):
                                   disc_interpolates.size()),
                               create_graph=True, retain_graph=True, only_inputs=True)[0]
 
+    gradients.view(gradients.shape[0], -1)
     gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean() * LAMBDA
     return gradient_penalty
 
@@ -162,7 +163,7 @@ if use_cuda:
 optimizerD = optim.Adam(netD.parameters(), lr=1e-4, betas=(0.5, 0.9))
 optimizerG = optim.Adam(netG.parameters(), lr=1e-4, betas=(0.5, 0.9))
 
-one = torch.FloatTensor([1])
+one = torch.ones([])
 mone = one * -1
 if use_cuda:
     one = one.cuda(gpu)
